@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="month_mn:war2">
+    <output-path>$PROJECT_DIR$/out/artifacts/month_mn_war2</output-path>
+    <root id="archive" name="month_mn_war.war">
+      <element id="artifact" artifact-name="month_mn:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="lib" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
