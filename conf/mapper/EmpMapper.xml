@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.llh.mapper.EmpMapper">
+      <insert id="addEmp">
+            insert into t_emp set ename=#{ename},tel=#{tel},email=#{email},nick_name=#{nickName},gender=#{gender},did=#{did},cid=#{cid},create_time=now(),status=#{status},uid=#{uid}
+      </insert>
+
+      <insert id="addUser">
+            insert into t_user set uname=#{ename},upwd=#{upwd},tel=#{tel},power=0
+      </insert>
+
+      <update id="delEmp">
+            update t_emp set flag=1 where eid=#{eid}
+      </update>
+
+      <update id="batchDelEmp">
+            update t_emp set flag=1 where eid in (${ids})
+      </update>
+
+      <update id="updateEmp">
+            update t_emp set tel=#{tel},email=#{email},nick_name=#{nickName},gender=#{gender},did=#{did},cid=#{cid},create_time=now(),status=#{status},uid=#{uid} where eid=#{eid}
+      </update>
+
+      <select id="getEmp" resultType="com.llh.domain.Emp">
+            select e.*, d.dname, c.cname, u.uname
+            from t_emp e
+            LEFT JOIN t_dept d on e.did = d.did
+            LEFT JOIN t_city c on e.cid = c.cid
+            LEFT JOIN t_user u on e.uid = u.uid where flag=0
+            <if test="ename!=null and ename!=''">
+                  and (instr(e.ename,#{ename}) or instr(e.nick_name,#{ename}))
+            </if>
+            <if test="uname!=null and uname!=''">
+                  and instr(u.uname,#{uname})
+            </if>
+            <if test="createTimeMin!=null and createTimeMin!=''">
+                  and e.create_time>=#{createTimeMin}
+            </if>
+            <if test="createTimeMax!=null and createTimeMax!=''">
+                  and e.create_time&lt;#{createTimeMax}
+            </if>
+            <if test="did!=null and did!=''">
+                  and e.did=#{did}
+            </if>
+            <if test="cid!=null and cid!=''">
+                  and e.cid=#{cid}
+            </if>
+            <if test="orderName!=null and orderName!=''">
+                  order by ${orderName}
+                  <if test="orderType!=null and orderType!=''">
+                        ${orderType}
+                  </if>
+            </if>
+      </select>
+
+      <select id="getDept" resultType="com.llh.domain.Dept">
+            select * from t_dept
+      </select>
+
+      <select id="getCity" resultType="com.llh.domain.City">
+            select * from t_city
+      </select>
+
+      <select id="checkTel" resultType="java.lang.Integer">
+            select count(*) from t_user where tel=#{tel}
+      </select>
+
+      <select id="toUpdate" resultType="com.llh.domain.Emp">
+            select * from t_emp where eid=#{eid}
+      </select>
+
+      <select id="getUser" resultType="com.llh.domain.User">
+            select * from t_user
+      </select>
+</mapper>
